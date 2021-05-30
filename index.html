@@ -74,9 +74,9 @@
       TrackJS.track('Testing TrackJS!');
     };
 
-    function traceFunction() {
+    /*function traceFunction() {
       console.trace();
-    }
+    }*/
 
     class InnerHtmlError extends Error {
       constructor(message) {
@@ -139,7 +139,12 @@
     })
 
     errorBtns[10].addEventListener('click', () => {
-      traceFunction();
+      const uno = () => { dos(); };
+      const dos = () => { tres(); };
+      const tres = () => { quatro(); };
+      const quatro = () => { console.trace(); };
+      uno();
+      //traceFunction();
     })
 
     errorBtns[11].addEventListener('click', () => {
