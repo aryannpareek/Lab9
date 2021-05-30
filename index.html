@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +26,7 @@
     }
   </style>
 </head>
+
 <body>
   <fieldset>
     <legend>Error Calculator</legend>
@@ -46,6 +48,9 @@
     <button>Console Error Demo</button>
     <button>Console Dir</button>
     <button>Console dirxml</button>
+
+    <button>Console Error</button>
+
     <button>Console Group Start</button>
     <button>Console Group End</button>
     <button>Console Table</button>
@@ -55,7 +60,31 @@
     <button>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({
+      token: "a574ab8a309344598ac560fba5772f29"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
+  <script>
+    window.onerror = function () {
+      console.log("OnError function triggered");
+      TrackJS.track('Testing TrackJS!');
+    };
+
+    function traceFunction() {
+      console.trace();
+    }
+
+    class InnerHtmlError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "InnerHtmlErrorMessage";
+      }
+    }
+
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
       let output = document.querySelector('output');
@@ -67,6 +96,64 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    errorBtns[0].addEventListener('click', () => {
+      console.log("Console Log Demo");
+    })
+
+    errorBtns[1].addEventListener('click', () => {
+      console.error("Console Error Demo");
+    })
+
+    errorBtns[2].addEventListener('click', () => {
+      console.dir(errorBtns[2]);
+    })
+
+    errorBtns[3].addEventListener('click', () => {
+      console.dirxml(errorBtns[3]);
+    })
+
+    errorBtns[4].addEventListener('click', () => {
+      console.error({ msg: "Test Error!" });
+    })
+
+    errorBtns[5].addEventListener('click', () => {
+      console.group('Console Group Start');
+    })
+
+    errorBtns[6].addEventListener('click', () => {
+      console.groupEnd();
+    })
+
+    errorBtns[7].addEventListener('click', () => {
+      console.table([{ 'Currency': "Bitcoin", 'Price': 35000 }, { 'Currency': "Ethereum", 'Price': 2200 }, { 'Currency': "Cardano", 'Price': 1.50 }]);
+    })
+
+    errorBtns[8].addEventListener('click', () => {
+      console.log('Started Timer...');
+      console.time();
+    })
+
+    errorBtns[9].addEventListener('click', () => {
+      console.log('Ended Timer')
+      console.timeEnd();
+    })
+
+    errorBtns[10].addEventListener('click', () => {
+      traceFunction();
+    })
+
+    errorBtns[11].addEventListener('click', () => {
+      try {
+        document.getElementById('CantFindThis').innerHTML = "This should throw an error";
+      }
+      catch (err) {
+        throw new InnerHtmlError();
+      }
+      finally {
+        console.log("Failed to set innerHTML of non-existent ID");
+      }
+    })
   </script>
 </body>
+
 </html>
